@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ChatBot from '../components/chat/ChatBot';
+
+---
+
+<Layout title="Downloads">
+  <main>
+    <Hero 
+      title="Downloads"
+      description="Download software and PDF files."
+    />
+    
+    <section class="cards-grid">
+      {cards.map(card => (
+        <Card {...card} />
+      ))}
+    </section>
+    
+    <ChatBot client:load />
+  </main>
+</Layout>
+
+<style>
+  main {
+    padding: var(--space-xl) 0;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+  }
+</style>
