@@ -1,0 +1,48 @@
+---
+interface NavItem {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  items: NavItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<aside class="sidebar">
+  <nav class="sidebar-nav">
+    {items.map(item => (
+      <a href={item.href} class="sidebar-link">{item.title}</a>
+    ))}
+  </nav>
+</aside>
+
+<style>
+  .sidebar {
+    width: 250px;
+    padding: var(--space-md);
+    border-right: 1px solid var(--color-border);
+    height: calc(100vh - 60px);
+    position: fixed;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .sidebar-link {
+    color: var(--color-text);
+    text-decoration: none;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--border-radius);
+  }
+
+  .sidebar-link:hover {
+    background: var(--color-surface);
+    color: var(--color-primary);
+  }
+</style>
