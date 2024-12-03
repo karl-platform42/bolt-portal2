@@ -1,51 +1,69 @@
 ---
-import ExpandableItem from '../components/ExpandableItem.astro';
-import { getFolderContents } from '../utils/googleDrive';
-
-const folderContents = await getFolderContents();
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-<head>
-  <title>Downloads</title>
-  <style>
-    ul {
-      list-style: none;
-      padding-left: 20px;
-    }
-    .folder {
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .file {
-      margin-left: 20px;
-    }
-  </style>
-</head>
-<body>
-  <h1>Downloads</h1>
-  <div id="folder-structure">
-    {folderContents.length > 0 ? (
-      folderContents.map(item => (
-        <ExpandableItem key={item.id} item={item} />
-      ))
-    ) : (
-      <p>No files or folders found.</p>
-    )}
-  </div>
-  
-  
+<Layout title="Downloads">
+  <main>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+      }
+      .category {
+        margin-bottom: 20px;
+      }
+      .heading {
+        cursor: pointer;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-weight: bold;
+        user-select: none;
+      }
+      .iframe-container {
+        display: none;
+        margin-top: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      iframe {
+        width: 100%;
+        height: 500px;
+        border: none;
+      }
+    </style>
 
-  <script>
-    document.querySelectorAll('.folder').forEach(folder => {
-      folder.addEventListener('click', () => {
-        const sublist = folder.nextElementSibling;
-        if (sublist instanceof HTMLElement) {
-          sublist.style.display = sublist.style.display === 'none' ? 'block' : 'none';
-        }
+    <div id="categories">
+      <div class="category" data-category="category1">
+        <div class="heading">Operator's checklist</div>
+        <div class="iframe-container">
+          <iframe
+            src="https://drive.google.com/embeddedfolderview?id=16smXpbs8y7YnC9TodYBGu_Gvd4Qm7f_t#list">
+          </iframe>
+        </div>
+      </div>
+      <div class="category" data-category="category2">
+        <div class="heading">Category 2</div>
+        <div class="iframe-container">
+          <iframe
+            src="https://drive.google.com/embeddedfolderview?id=YOUR_FOLDER_ID_2#grid">
+          </iframe>
+        </div>
+      </div>
+      <!-- Add more categories as needed -->
+    </div>
+
+    <script>
+      document.querySelectorAll('.heading').forEach((heading) => {
+        heading.addEventListener('click', () => {
+          const container = heading.nextElementSibling as HTMLElement;
+          const isVisible = container.style.display === 'block';
+          container.style.display = isVisible ? 'none' : 'block';
+        });
       });
-    });
-  </script>
-  
-</body>
-</html>
+    </script>
+  </main>
+</Layout>
