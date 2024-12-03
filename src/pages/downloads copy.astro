@@ -1,0 +1,68 @@
+---
+
+import { fetchFolderContents, extractFolderIdFromLink } from '../utils/googleDrive';
+
+const publicFolderLink = import.meta.env.PUBLIC_GOOGLE_DRIVE_FOLDER_LINK;
+const apiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY;
+
+// Extract folder ID and fetch contents
+const folderId = extractFolderIdFromLink(publicFolderLink);
+const folderContents = folderId ? await fetchFolderContents(folderId, apiKey) : [];
+---
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Downloads copy</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .debug-info {
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .download-item {
+      background-color: #f9f9f9;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Downloads</h1>
+
+  <div class="debug-info">
+    Debug Information:
+    - Folder Link: {publicFolderLink}
+    - Folder ID: {folderId || 'Not found'}
+    - API Key Present: {apiKey ? 'Yes' : 'No'}
+  </div>
+
+  <div class="downloads-list">
+    {folderContents.length > 0 ? (
+      folderContents.map(item => (
+        <div class="download-item">
+          {item.isFolder ? (
+            <span>📁 {item.name} (Folder)</span>
+          ) : (
+            <a href={item.webViewLink} target="_blank" rel="noopener noreferrer">
+              📄 {item.name}
+            </a>
+          )}
+        </div>
+      ))
+    ) : (
+      <p>No files found. Please check the debug information above.</p>
+    )}
+  </div>
+</body>
+</html>
